@@ -1,0 +1,326 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+    <style>
+      .button {
+        background: #FF4742;
+        border: 1px solid #FF4742;
+        border-radius: 6px;
+        box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+        box-sizing: border-box;
+        color: #FFFFFF;
+        cursor: pointer;
+        display: inline-block;
+        font-family: nunito,roboto,proxima-nova,"proxima nova",sans-serif;
+        font-size: smaller;
+        font-weight: 600;
+        line-height: 10px;
+        min-height: 10px;
+        outline: 0;
+        padding: 4px 5px;
+        text-align: center;
+        text-rendering: geometricprecision;
+        text-transform: none;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        vertical-align: middle;
+      }
+
+      .button:hover,
+      .button:active {
+        background-color: initial;
+        background-position: 0 0;
+        color: #FF4742;
+      }
+
+      .button:active { opacity: .5; }
+      table { text-align: left; }
+      th { font-size: xx-small; padding-right: 10px; }
+      td { border-spacing: 1px; background-color: transparent }
+      td.absent { background-color: red; }
+      td.present { background-color: lightgreen; }
+      td.late { background-color: orange; }
+      td.mandatory { border: thin solid; }
+      .optional { position: absolute; visibility: collapse; }
+
+      td.score { background-color: transparent }
+      td.name { background-color: transparent}
+    </style>
+  <title>Attendance</title>
+  <script>
+    function remove_row(id) {
+      document.getElementById(id).remove()
+      remove_empty_columns()
+    }
+
+    function remove_empty_columns() {
+      let rows = document.getElementById("students").rows
+      if (rows.length < 2)
+        return
+
+      let total_columns = rows[1].children.length
+
+      for (let i=2; i < total_columns; i++) {
+        let empty_column = true
+
+        for (let x=1; x < rows.length; x++) {
+          let row = rows[x]
+
+          if (row.children[i].className !== "optional") {
+            empty_column = false
+            break
+          }
+        }
+        if (empty_column) {
+          // remove_column(rows[0].children[i].id)
+          for (let x = 0; x < rows.length; x++) {
+            rows[x].children[i].remove()
+          }
+          i -= 1
+          total_columns -= 1
+        }
+      }
+    }
+
+    function remove_column(index) {
+      let theaders = document.getElementById("students").tHead
+      let total_columns = theaders.children[0].children.length
+      let rows = document.getElementById("students").rows
+
+      for (let i=2; i < total_columns; i++) {
+        if (rows[0].children[i].id === index) {
+          for (let x = 0; x < rows.length; x++) {
+            rows[x].children[i].remove()
+          }
+          break
+        }
+      }
+    }
+
+    function change_visibility(new_text, position, visibility) {
+        for (let element of document.getElementsByClassName("optional")) {
+          element.style["position"] = position
+          element.style["visibility"] = visibility
+        }
+        document.getElementById("visibility_button").value = new_text
+    }
+
+    function swap() {
+      if (document.getElementById("visibility_button").value === "toon alle") {
+        change_visibility("toon verplicht", "relative", "visible")
+      } else {
+        change_visibility("toon alle", "absolute", "collapse")
+      }
+    }
+  </script>
+</head>
+
+<body>
+
+  <table id="students">
+    <thead>
+      <tr>
+        <th nowrap></th>
+        <th nowrap>2023-10-24 22:46</th>
+
+        
+        <th nowrap id="2" class="optional">
+          <input type="image" height="10" onclick="remove_column('2')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-09-01
+        </th>
+        
+        <th nowrap id="3" class="mandatory">
+          <input type="image" height="10" onclick="remove_column('3')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-09-04
+        </th>
+        
+        <th nowrap id="4" class="optional">
+          <input type="image" height="10" onclick="remove_column('4')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-09-06
+        </th>
+        
+        <th nowrap id="5" class="optional">
+          <input type="image" height="10" onclick="remove_column('5')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-09-07
+        </th>
+        
+        <th nowrap id="6" class="mandatory">
+          <input type="image" height="10" onclick="remove_column('6')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-09-11
+        </th>
+        
+        <th nowrap id="7" class="optional">
+          <input type="image" height="10" onclick="remove_column('7')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-09-12
+        </th>
+        
+        <th nowrap id="8" class="optional">
+          <input type="image" height="10" onclick="remove_column('8')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-09-13
+        </th>
+        
+        <th nowrap id="9" class="optional">
+          <input type="image" height="10" onclick="remove_column('9')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-09-14
+        </th>
+        
+        <th nowrap id="10" class="mandatory">
+          <input type="image" height="10" onclick="remove_column('10')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-09-18
+        </th>
+        
+        <th nowrap id="11" class="optional">
+          <input type="image" height="10" onclick="remove_column('11')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-09-20
+        </th>
+        
+        <th nowrap id="12" class="optional">
+          <input type="image" height="10" onclick="remove_column('12')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-09-21
+        </th>
+        
+        <th nowrap id="13" class="mandatory">
+          <input type="image" height="10" onclick="remove_column('13')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-09-25
+        </th>
+        
+        <th nowrap id="14" class="optional">
+          <input type="image" height="10" onclick="remove_column('14')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-09-27
+        </th>
+        
+        <th nowrap id="15" class="optional">
+          <input type="image" height="10" onclick="remove_column('15')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-09-28
+        </th>
+        
+        <th nowrap id="16" class="mandatory">
+          <input type="image" height="10" onclick="remove_column('16')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-10-02
+        </th>
+        
+        <th nowrap id="17" class="optional">
+          <input type="image" height="10" onclick="remove_column('17')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-10-04
+        </th>
+        
+        <th nowrap id="18" class="mandatory">
+          <input type="image" height="10" onclick="remove_column('18')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-10-09
+        </th>
+        
+        <th nowrap id="19" class="optional">
+          <input type="image" height="10" onclick="remove_column('19')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-10-11
+        </th>
+        
+        <th nowrap id="20" class="optional">
+          <input type="image" height="10" onclick="remove_column('20')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-10-12
+        </th>
+        
+        <th nowrap id="21" class="mandatory">
+          <input type="image" height="10" onclick="remove_column('21')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-10-23
+        </th>
+        
+        <th nowrap id="22" class="mandatory">
+          <input type="image" height="10" onclick="remove_column('22')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-10-30
+        </th>
+        
+        <th nowrap id="23" class="mandatory">
+          <input type="image" height="10" onclick="remove_column('23')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/> 2023-11-06
+        </th>
+        
+        <th nowrap>Verplichte aanwezigheid</th>
+        <th nowrap><input id="visibility_button" type="button" class="button" onclick="swap()" value="toon alle"></th>
+      </tr>
+    </thead>
+
+    
+    
+    <tr id="271893">
+
+      <td><input type="image" height="10" onclick="remove_row('271893')" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAWQAAAFkBqp2phgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADbSURBVDiNpZC7CsJAEEXPZI2QlPov2usXpDGVlWjhI98iiIWCWFj5AAsbfypWQRFZ1yJoYVY05nZzmXuYO5I06m3EjIEK+XQCE0nSrMV/hJ+KnQJhgKpTIAyAFSCe95NnBYjv426PqCB8eSoIcbdHK6T0bpjzGb2YonoRuGW4XVG9EXo5w1wu3wEAer8BBNUdpvN8gt6vf6uQV9YLVNB6nZ1WSOvozeo7QHwf1Rm8nS2oTp/7YZf5gyTNmslAPC+7aPHgww9sizbvIyCPHOBUIB87YCIg/ieMED0AwwFLnTqp6K0AAAAASUVORK5CYII="/></td>
+      <td nowrap class="name">Jouw aanwezigheidsregistraties:</td>
+
+      
+      
+      <td class="present optional"></td>
+      
+      
+      
+      <td class="present mandatory"></td>
+      
+      
+      
+      <td class="present optional"></td>
+      
+      
+      
+      <td class="present optional"></td>
+      
+      
+      
+      <td class="present mandatory"></td>
+      
+      
+      
+      <td class="present optional"></td>
+      
+      
+      
+      <td class="present optional"></td>
+      
+      
+      
+      <td class="present optional"></td>
+      
+      
+      
+      <td class="present mandatory"></td>
+      
+      
+      
+      <td class="present optional"></td>
+      
+      
+      
+      <td class="present optional"></td>
+      
+      
+      
+      <td class="present mandatory"></td>
+      
+      
+      
+      <td class="present optional"></td>
+      
+      
+      
+      <td class="present optional"></td>
+      
+      
+      
+      <td class="late mandatory"></td>
+      
+      
+      
+      <td class="present optional"></td>
+      
+      
+      
+      <td class="present mandatory"></td>
+      
+      
+      
+      <td class="present optional"></td>
+      
+      
+      
+      <td class="present optional"></td>
+      
+      
+      
+      <td class="absent mandatory"></td>
+      
+      
+      
+      <td class="mandatory"></td>
+      
+      
+      
+      <td class="mandatory"></td>
+      
+      
+
+      <td class="score">66%</td>
+    </tr>
+    
+  </table>
+</body>
+</html>
