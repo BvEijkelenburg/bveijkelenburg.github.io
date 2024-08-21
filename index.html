@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyScript IDE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+    <script defer src="https://pyscript.net/releases/2023.03.1/pyscript.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #editor-container { border: 1px solid #ccc; }
+        .CodeMirror { height: 300px; font-size: 16px; }
+        py-config { display: none; }
+        py-splashscreen { display: none; }
+        #runButton:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div id="editor-container"></div>
+    <br>
+    <button id="runButton" disabled>Voer je python code uit</button>
+    <py-script id="userScript"></py-script>
+
+    <py-config>
+        packages = ["micropip"]
+    </py-config>
+
+    <script>
+        // Initialize CodeMirror
+        var editor = CodeMirror(document.getElementById("editor-container"), {
+            mode: "python",
+            theme: "monokai",
+            lineNumbers: true,
+            indentUnit: 4,
+            tabSize: 4,
+            indentWithTabs: false,
+            smartIndent: true,
+        });
+
+        editor.setValue("#Schrijf hier je Python code...");
+
+        async function runCode() {
+            const code = editor.getValue();
+
+            const scriptContent = `
+import sys
+from io import StringIO
+
+old_stdout = sys.stdout
+sys.stdout = mystdout = StringIO()
+
+try:
+    exec(\"\"\"${code}\"\"\")
+except Exception as e:
+    print(f"Error: {str(e)}")
+
+sys.stdout = old_stdout
+output = mystdout.getvalue()
+print(output)
+            `;
+            document.getElementsByClassName("py-terminal")[0].innerHTML = "";
+            await pyscript.interpreter.run(scriptContent);
+        }
+
+        document.getElementById("runButton").addEventListener("click", runCode);
+
+        const observer = new MutationObserver((mutationsList, observer) => {
+            for (const mutation of mutationsList) {
+                if (mutation.type === 'childList' && document.querySelector('.py-terminal')) {
+                    document.getElementById("runButton").disabled = false;
+                    observer.disconnect();
+                    break;
+                }
+            }
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+    </script>
+</body>
+</html>
