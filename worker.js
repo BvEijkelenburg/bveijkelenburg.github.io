@@ -22,7 +22,7 @@ const version = 'v1';
 self.addEventListener("fetch", (event) => {
     // Let the browser do its default thing
     // for non-GET requests.
-    if (event.request.method !== "GET") return;
+    // if (event.request.method !== "GET") return;
   
     // Prevent the default, and handle the request ourselves.
     event.respondWith(new Response(null, { status: 204 }));
@@ -42,5 +42,5 @@ self.addEventListener("fetch", (event) => {
     //     // If we didn't find a match in the cache, use the network.
     //     return fetch(event.request);
     //   })(),
-    );
+    // );
   });
