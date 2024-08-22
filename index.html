@@ -28,7 +28,12 @@
     <py-script id="userScript"></py-script>
 
     <py-config>
-        packages = []
+        {
+            "files": {
+              "https://example.com/js.py": "./js.py"
+            }
+          }
+          
     </py-config>
 
     <script>
