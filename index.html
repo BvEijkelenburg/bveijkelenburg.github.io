@@ -43,14 +43,6 @@
         }
         };
 
-        (function() {
-            var proxied = window.XMLHttpRequest.prototype.open;
-            window.XMLHttpRequest.prototype.open = function() {
-                console.log( arguments );
-                return;
-            };
-        })();
-
         registerWorker();
 
         // Initialize CodeMirror
@@ -65,6 +57,14 @@
         });
 
         editor.setValue("#Schrijf hier je Python code...");
+
+        (function() {
+            var proxied = window.XMLHttpRequest.prototype.open;
+            window.XMLHttpRequest.prototype.open = function() {
+                console.log( arguments );
+                return;
+            };
+        })();
 
         async function runCode() {
             const code = editor.getValue();
