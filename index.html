@@ -25,13 +25,15 @@
     <div id="editor-container"></div>
     <br>
     <button id="runButton" disabled>Voer je python code uit</button>
-    <py-script id="userScript"></py-script>
 
     <py-config>
         [files]
         "https://bveijkelenburg.github.io/js.py" = ""
-          
     </py-config>
+
+    <py-script id="userScript"></py-script>
+
+
 
     <script>
         const registerWorker = async () => {
