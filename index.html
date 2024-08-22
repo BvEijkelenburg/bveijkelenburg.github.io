@@ -71,7 +71,8 @@
             const scriptContent = `
 import sys
 from io import StringIO
-
+js = None
+requests = None
 old_stdout = sys.stdout
 sys.stdout = mystdout = StringIO()
 
