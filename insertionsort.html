@@ -62,7 +62,7 @@
 </head>
 <body>
 
-  <h1>Kaarten Wisselen met Swap-Positie</h1>
+  <h1>Insertion Sort</h1>
   <div class="index-container" id="indexContainer"></div>
   <div class="card-container" id="cardContainer"></div>
   <button class="reset-button" onclick="shuffleCards()">Reset</button>
@@ -95,7 +95,7 @@
       cards.forEach((value, index) => {
         const cardElement = document.createElement("div");
         cardElement.classList.add(value === "empty" ? "empty-card" : "card");
-        cardElement.innerText = value === "empty" ? "Leeg" : `Harten ${value}`;
+        cardElement.innerText = value === "empty" ? "Leeg" : `${value}`;
         cardElement.dataset.index = index;
 
         cardElement.addEventListener("click", () => selectCard(index));
