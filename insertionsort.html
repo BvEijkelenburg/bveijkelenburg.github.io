@@ -13,13 +13,12 @@
       margin-top: 20px;
     }
 
-    .card-container {
+    .card-container, .index-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      position: relative;
       max-width: 1200px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
 
     .card, .empty-card {
@@ -46,6 +45,14 @@
       color: #888;
     }
 
+    .index {
+      width: 102px;
+      margin: 10px;
+      text-align: center;
+      font-size: 16px;
+      color: #333;
+    }
+
     .reset-button {
       padding: 10px 20px;
       font-size: 16px;
@@ -55,7 +62,8 @@
 </head>
 <body>
 
-  <h1>Insertion Sort</h1>
+  <h1>Kaarten Wisselen met Swap-Positie</h1>
+  <div class="index-container" id="indexContainer"></div>
   <div class="card-container" id="cardContainer"></div>
   <button class="reset-button" onclick="shuffleCards()">Reset</button>
 
@@ -76,6 +84,7 @@
       shuffle(cards);
       cards.push("empty"); // Voeg de lege kaart toe aan het einde
       displayCards();
+      displayIndices();
     }
 
     function displayCards() {
@@ -92,6 +101,19 @@
         cardElement.addEventListener("click", () => selectCard(index));
         cardContainer.appendChild(cardElement);
       });
+    }
+
+    function displayIndices() {
+      const indexContainer = document.getElementById("indexContainer");
+      indexContainer.innerHTML = ""; // Leeg de indexcontainer
+
+      // Voeg indexen 0 t/m 8 toe
+      for (let i = 0; i < cardValues.length; i++) {
+        const indexElement = document.createElement("div");
+        indexElement.classList.add("index");
+        indexElement.innerText = i;
+        indexContainer.appendChild(indexElement);
+      }
     }
 
     function selectCard(index) {
