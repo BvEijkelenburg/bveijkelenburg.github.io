@@ -25,35 +25,9 @@
     <div id="editor-container"></div>
     <br>
     <button id="runButton" disabled>Voer je python code uit</button>
-
-    <py-config>
-        [files]
-        "/js.py" = ""
-    </py-config>
-
     <py-script id="userScript"></py-script>
 
-
-
     <script>
-        const registerWorker = async () => {
-            if ('serviceWorker' in navigator) {
-                try {
-                const registration = await navigator.serviceWorker.register('/worker.js');
-                console.log('Service worker registration succeeded:', registration);
-                } catch (error) {
-                console.error(`Registration failed with ${error}`);
-                }
-            }
-        };
-
-        const removeJs = async () => {
-            await pyscript.interpreter.run('js = None');
-        }
-
-        registerWorker();
-        removeJs();
-
         // Initialize CodeMirror
         var editor = CodeMirror(document.getElementById("editor-container"), {
             mode: "python",
@@ -65,7 +39,12 @@
             smartIndent: true,
         });
 
-        editor.setValue("#Schrijf hier je Python code...");
+        editor.setValue(`from js import fetch
+
+async def func(response):
+	print(await response.text())
+
+response = fetch("https://api.github.com/users/bveijkelenburg").then(func);`)
 
         async function runCode() {
             const code = editor.getValue();
@@ -73,8 +52,7 @@
             const scriptContent = `
 import sys
 from io import StringIO
-js = None
-requests = None
+
 old_stdout = sys.stdout
 sys.stdout = mystdout = StringIO()
 
