@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PyScript IDE</title>
+    <script>
+        (function() {
+            let oldXhr = window.XMLHttpRequest;
+            window.XMLHttpRequest = function() {
+                let xhr = new oldXhr();
+                let fetchRequest = fetch; // Sla de fetch methode op
+
+                // Vervang open en send methoden van XHR door fetch
+                xhr.open = function(method, url) {
+                    return fetchRequest(url, { method: method });
+                };
+                return xhr;
+            };
+        })();
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
     <script defer src="https://pyscript.net/releases/2023.03.1/pyscript.js"></script>
