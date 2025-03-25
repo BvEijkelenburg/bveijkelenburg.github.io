@@ -1,8 +1,13 @@
 <!doctype html>
 <html>
 <head>
+    <script>
+        function onMyFrameLoad(source) {
+          source.setAttribute("sandbox", "allow-scripts");
+        }
+    </script>
 </head>
 <body>
-    <iframe src="/index.html" width="1000" height="400" sandbox="allow-scripts"></iframe>
+    <iframe onload="onMyFrameLoad(this)" src="/index.html" width="1000" height="400"></iframe>
 </body>
 </html>
