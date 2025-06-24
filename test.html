@@ -2,13 +2,25 @@
 <html>
 <head>
     <script>
-        function onMyFrameLoad(source) {
-          source.setAttribute("sandbox", "allow-scripts");
+
+        async function load() {
+            try {
+                let response = await fetch("/api/v1/users/self")
+                document.getElementById('console').innerText = await response.json()
+            } catch(error) {
+                document.getElementById('console').innerText = error
+            }
         }
+
+        document.addEventListener("DOMContentLoaded", (event) => {
+            console.log("DOM fully loaded and parsed");
+            document.getElementById('load_it').addEventListener("click", load)
+        });
+
     </script>
 </head>
 <body>
-<!--    <iframe onload="onMyFrameLoad(this)" src="/index.html" width="1000" height="400" sandbox="allow-scripts"></iframe>-->
-    <iframe src="/index.html" width="1000" height="400" sandbox="allow-scripts"></iframe>
+<button id="load_it">Load!</button>
+<div id="console"></div>
 </body>
 </html>
