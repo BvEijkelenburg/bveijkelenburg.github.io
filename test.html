@@ -5,7 +5,7 @@
 
         async function load() {
             try {
-                let response = await fetch("/api/v1/users/self")
+                let response = await fetch("https://canvas.hu.nl/api/v1/users/self")
                 document.getElementById('console').innerText = await response.json()
             } catch(error) {
                 document.getElementById('console').innerText = error
