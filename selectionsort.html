@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selection Sort</title>
+  <style>
+    /* Basisstijl voor de pagina */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    /* Stijl voor de kaarten */
+    .card-container, .index-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      position: relative;
+      width: 100%;
+      max-width: 1200px; /* Pas deze waarde aan afhankelijk van het aantal kaarten */
+      margin-bottom: 20px;
+    }
+
+    .card {
+      user-select: none;
+      width: 100px;
+      height: 150px;
+      margin: 10px;
+      border: 2px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      background-color: #fff;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.5s ease;
+    }
+
+    .index-label {
+      position: absolute;
+      bottom: -25px;
+      font-weight: bold;
+    }
+
+    /* Stijl voor de tijdelijke "swap"-positie */
+    .swap-position {
+      user-select: none;
+      width: 100px;
+      height: 150px;
+      margin: 10px;
+      border: 2px dashed #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #888;
+      text-align: center;
+    }
+
+    /* Reset-knop */
+    .reset-button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .index {
+      width: 102px;
+      margin: 10px;
+      text-align: center;
+      font-size: 16px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Selection Sort</h1>
+  <div class="index-container" id="indexContainer"></div>
+  <div class="card-container" id="cardContainer"></div>
+  <div class="swap-position" id="swapPosition">Swap Positie</div>
+  <button class="reset-button" onclick="shuffleCards()">Reset</button>
+
+  <script>
+    // Kaartinformatie
+    const cardValues = ["2", "3", "4", "5", "6", "7", "8", "9", "10"];
+    let cards = [];
+    let selectedCards = [];
+
+    // Functie om de kaarten in willekeurige volgorde te plaatsen
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+
+      displayIndices();
+    }
+
+    // Kaarten opnieuw genereren en tonen
+    function shuffleCards() {
+      cards = cardValues.slice(); // Kopieer de kaarten array
+      shuffle(cards);
+      displayCards();
+    }
+
+    // Kaarten tonen in HTML
+    function displayCards() {
+      const cardContainer = document.getElementById("cardContainer");
+      cardContainer.innerHTML = ""; // Leeg de container
+
+      cards.forEach((card, index) => {
+        const cardElement = document.createElement("div");
+        cardElement.classList.add("card");
+        cardElement.innerText = card;
+        cardElement.dataset.index = index;
+
+        cardElement.style.transform = `translate(0, 0)`; // Reset transform bij nieuwe positie
+
+        cardElement.addEventListener("click", () => selectCard(index));
+
+        cardContainer.appendChild(cardElement);
+      });
+    }
+
+    // Kaarten selecteren en verwisselen
+    function selectCard(index) {
+      if (selectedCards.length < 2 && !selectedCards.includes(index)) {
+        selectedCards.push(index);
+        document.querySelectorAll(".card")[index].style.borderColor = "red";
+      }
+
+      if (selectedCards.length === 2) {
+        animateSwap(selectedCards[0], selectedCards[1]);
+        selectedCards = [];
+      }
+    }
+
+    function displayIndices() {
+      const indexContainer = document.getElementById("indexContainer");
+      indexContainer.innerHTML = ""; // Leeg de indexcontainer
+
+      // Voeg indexen 0 t/m 8 toe
+      for (let i = 0; i < cardValues.length; i++) {
+        const indexElement = document.createElement("div");
+        indexElement.classList.add("index");
+        indexElement.innerText = i;
+        indexContainer.appendChild(indexElement);
+      }
+    }
+
+    // Functie om de animatie te starten voor de swap
+    function animateSwap(index1, index2) {
+      const cardElements = document.querySelectorAll(".card");
+      const swapPosition = document.getElementById("swapPosition");
+
+      // Coördinaten berekenen
+      const pos1 = cardElements[index1].getBoundingClientRect();
+      const pos2 = cardElements[index2].getBoundingClientRect();
+      const swapPos = swapPosition.getBoundingClientRect();
+
+      // Bereken de verplaatsing voor de eerste kaart naar de swap-positie
+      const dx1 = swapPos.left - pos1.left;
+      const dy1 = swapPos.top - pos1.top;
+
+      // Bereken de verplaatsing voor de tweede kaart naar de eerste positie
+      const dx2 = pos1.left - pos2.left;
+      const dy2 = pos1.top - pos2.top;
+
+      // Bereken de verplaatsing van swap-positie naar de tweede positie
+      const dx3 = -dx2;
+      const dy3 = 0;
+
+      // Stap 1: Verplaats eerste kaart naar de swap-positie
+      cardElements[index1].style.transform = `translate(${dx1}px, ${dy1}px)`;
+      
+      // Na de eerste animatie, start de tweede stap
+      setTimeout(() => {
+        cardElements[index2].style.transform = `translate(${dx2}px, ${dy2}px)`;
+
+        // Na de tweede animatie, verplaats de eerste kaart naar de tweede positie
+        setTimeout(() => {
+          cardElements[index1].style.transform = `translate(${dx3}px, ${dy3}px)`;
+
+          // Wissel de kaarten in de array en toon de nieuwe posities
+          [cards[index1], cards[index2]] = [cards[index2], cards[index1]];
+
+          // Laatste stap: Reset de transformaties na animatie om ze op de juiste posities te plaatsen
+          setTimeout(() => {
+            displayCards();
+          }, 500);
+
+        }, 500); // Tweede stap duurt 500 ms
+      }, 500); // Eerste stap duurt 500 ms
+    }
+
+    // Pagina opstarten met geshuffelde kaarten
+    shuffleCards();
+  </script>
+
+</body>
+</html>

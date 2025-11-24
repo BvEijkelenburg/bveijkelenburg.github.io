@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>PyScript IDE</title>
+
+    <!-- Load this script first, to be sure to log all created PyScript workers -->
+    <script src="js/ide.js"></script>
+
+    <link rel="stylesheet" href="css/pyscript-2025-3-1/core.css">
+    <script type="module" src="js/pyscript-2025.3.1/core.js"></script>
+
+    <script src="js/codemirror-5.65.2/codemirror.min.js"></script>
+    <script src="js/codemirror-5.65.2/python.min.js"></script>
+
+    <link rel="stylesheet" href="css/mystyle.css">
+    <link rel="stylesheet" href="css/codemirror-5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="css/codemirror-5.65.2/monokai.min.css">
+</head>
+<body>
+
+<py-config src="/pyconfig.toml"></py-config>
+
+<div class="toprow">
+    <div>
+        <button id="runner">Run!</button>
+        <button id="copy">Copy Code!</button>
+        <span id="copied">📋</span>
+    </div>
+    <span style="font-size: small">Vergroot of verklein de tekst met Ctrl+ of Ctrl-, of gebruik (in Schoolyear) de browserknoppen hierboven!</span>
+    <span style="" id="datetime"></span>
+</div>
+<div class="container">
+    <div class="box" id="editor-container"></div><br>
+    <div class="box" id="terminal-container">
+        <div id="pyterminal-container"></div>
+        <div id="progress-container">
+            <div id="progress-bar"></div>
+            <button id="stop-button" title="Stop proces">
+                <div class="stop-icon-outline"></div>
+            </button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Insertion Sort</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .card-container, .index-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 1200px;
+      margin-bottom: 10px;
+    }
+
+    .card, .empty-card {
+      user-select: none;
+      width: 100px;
+      height: 150px;
+      margin: 10px;
+      border: 2px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      background-color: #fff;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.5s ease;
+    }
+
+    .card.selected, .empty-card.selected {
+      border-color: red;
+    }
+
+    .empty-card {
+      border-style: dashed;
+      color: #888;
+    }
+
+    .index {
+      width: 102px;
+      margin: 10px;
+      text-align: center;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .reset-button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Insertion Sort</h1>
+  <div class="index-container" id="indexContainer"></div>
+  <div class="card-container" id="cardContainer"></div>
+  <button class="reset-button" onclick="shuffleCards()">Reset</button>
+
+  <script>
+    const cardValues = ["2", "3", "4", "5", "6", "7", "8", "9", "10"];
+    let cards = [];
+    let selectedCardIndex = null;
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function shuffleCards() {
+      cards = cardValues.slice(); // Kopieer de kaarten array
+      shuffle(cards);
+      cards.push("empty"); // Voeg de lege kaart toe aan het einde
+      displayCards();
+      displayIndices();
+    }
+
+    function displayCards() {
+      const cardContainer = document.getElementById("cardContainer");
+      cardContainer.innerHTML = ""; // Leeg de container
+
+      // Voeg kaarten toe
+      cards.forEach((value, index) => {
+        const cardElement = document.createElement("div");
+        cardElement.classList.add(value === "empty" ? "empty-card" : "card");
+        cardElement.innerText = value === "empty" ? "Leeg" : `${value}`;
+        cardElement.dataset.index = index;
+
+        cardElement.addEventListener("click", () => selectCard(index));
+        cardContainer.appendChild(cardElement);
+      });
+    }
+
+    function displayIndices() {
+      const indexContainer = document.getElementById("indexContainer");
+      indexContainer.innerHTML = ""; // Leeg de indexcontainer
+
+      // Voeg indexen 0 t/m 8 toe
+      for (let i = 0; i < cardValues.length; i++) {
+        const indexElement = document.createElement("div");
+        indexElement.classList.add("index");
+        indexElement.innerText = i;
+        indexContainer.appendChild(indexElement);
+      }
+    }
+
+    function selectCard(index) {
+      const cardElements = document.querySelectorAll(".card, .empty-card");
+
+      if (selectedCardIndex === null) {
+        // Eerste selectie
+        selectedCardIndex = index;
+        cardElements[index].classList.add("selected");
+      } else {
+        // Tweede selectie: wissel kaarten
+        animateSwap(selectedCardIndex, index);
+        selectedCardIndex = null;
+      }
+    }
+
+    function animateSwap(index1, index2) {
+      const cardElements = document.querySelectorAll(".card, .empty-card");
+      const element1 = cardElements[index1];
+      const element2 = cardElements[index2];
+
+      const pos1 = element1.getBoundingClientRect();
+      const pos2 = element2.getBoundingClientRect();
+
+      const dx1 = pos2.left - pos1.left;
+      const dy1 = pos2.top - pos1.top;
+      const dx2 = pos1.left - pos2.left;
+      const dy2 = pos1.top - pos2.top;
+
+      element1.style.transform = `translate(${dx1}px, ${dy1}px)`;
+      element2.style.transform = `translate(${dx2}px, ${dy2}px)`;
+
+      setTimeout(() => {
+        // Verwijder animaties en werk de positie bij na de animatie
+        element1.style.transform = `translate(0, 0)`;
+        element2.style.transform = `translate(0, 0)`;
+
+        // Wissel kaarten in de array
+        [cards[index1], cards[index2]] = [cards[index2], cards[index1]];
+
+        // Reset selectie en toon nieuwe volgorde
+        displayCards();
+      }, 500);
+    }
+
+    // Start met een geshuffelde set kaarten
+    shuffleCards();
+  </script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+interpreter = "https://cdn.jsdelivr.net/pyodide/v0.27.4/full/pyodide.mjs"
+packages = []

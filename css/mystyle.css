@@ -1,0 +1,137 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+    color: #222;
+}
+
+.toprow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    background-color: #fff;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.box {
+    flex: 1 1 0;
+    width: 50%;
+    max-width: 50%;
+    box-sizing: border-box;
+    padding: 10px;
+    border: none;
+    overflow: hidden;
+}
+
+.CodeMirror {
+    max-width: 100%;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    background-color: #272822;
+    color: #f8f8f2;
+}
+
+#terminal-container {
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* --------- Terminal --------- */
+py-terminal {
+    height: 300px;
+    margin: auto;
+    padding: 1rem;
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border-radius: 8px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
+    font-family: monospace;
+}
+
+/* --------- Kopie-icoon --------- */
+#copied {
+    visibility: hidden;
+}
+
+#copied.show {
+    visibility: visible;
+}
+
+/* --------- Progressbar & Stop Button --------- */
+#progress-container {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0px 2px 0px 0px;
+    visibility: hidden;
+}
+
+#progress-bar {
+    background-color: #444;
+    overflow: hidden;
+    border-radius: 3px;
+    margin-top: 2px;
+    width: 100%;
+    height: 6px;
+    background-image: radial-gradient(
+            circle at 0% center,
+            rgba(180, 220, 255, 0) 0%,
+            rgba(180, 220, 255, 0.5) 20%,
+            rgba(120, 180, 255, 0.8) 40%,
+            rgba(180, 220, 255, 0.5) 60%,
+            rgba(180, 220, 255, 0) 80%
+    );
+    background-repeat: no-repeat;
+    background-size: 30% 100%;
+    animation: sweep 4s linear infinite;
+}
+
+@keyframes sweep {
+    0% {background-position: -40% 0;}
+    100% {background-position: 140% 0;}
+}
+
+#stop-button {
+    width: 16px;
+    height: 16px;
+    background-color: #ff4c4c;
+    border: none;
+    border-radius: 4px; /* afgeronde hoeken zoals in PyCharm */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
+}
+
+#stop-button:hover {
+    background-color: #e03a3a;
+}
+
+.stop-icon-outline {
+    width: 10px;
+    height: 10px;
+    border: 2px solid white;
+    box-sizing: border-box;
+    border-radius: 2px; /* eventueel afronden voor zachtere look */
+}
